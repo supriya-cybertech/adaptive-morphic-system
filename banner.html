@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AMS Banner</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:ital@0;1&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 1280px;
+            height: 400px;
+            overflow: hidden;
+            background: #000007;
+            font-family: 'Orbitron', monospace;
+        }
+
+        canvas {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background:
+                radial-gradient(ellipse 60% 80% at 72% 50%, rgba(80, 20, 180, 0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 20% 50%, rgba(0, 180, 255, 0.10) 0%, transparent 70%);
+        }
+
+        .scanlines {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: repeating-linear-gradient(to bottom,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.08) 2px,
+                    rgba(0, 0, 0, 0.08) 4px);
+            pointer-events: none;
+        }
+
+        .content {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            padding: 0 72px;
+            gap: 0;
+        }
+
+        .left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .eyebrow {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.35em;
+            color: #00c8ff;
+            text-transform: uppercase;
+            opacity: 0.75;
+            margin-bottom: 14px;
+            animation: fadeUp 1s ease both;
+        }
+
+        .title-line1 {
+            font-size: 52px;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.01em;
+            color: #ffffff;
+            text-shadow:
+                0 0 40px rgba(120, 60, 255, 0.6),
+                0 0 80px rgba(120, 60, 255, 0.3);
+            animation: fadeUp 1s 0.1s ease both;
+        }
+
+        .title-line2 {
+            font-size: 52px;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -0.01em;
+            background: linear-gradient(90deg, #a855f7, #38bdf8, #a855f7);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeUp 1s 0.18s ease both, shimmer 4s linear 1s infinite;
+            margin-bottom: 22px;
+        }
+
+        .tagline {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            line-height: 1.7;
+            color: rgba(200, 220, 255, 0.55);
+            letter-spacing: 0.04em;
+            max-width: 380px;
+            animation: fadeUp 1s 0.28s ease both;
+        }
+
+        .badges {
+            display: flex;
+            gap: 10px;
+            margin-top: 26px;
+            animation: fadeUp 1s 0.38s ease both;
+        }
+
+        .badge {
+            padding: 5px 13px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .badge-outline {
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            color: rgba(168, 85, 247, 0.9);
+            background: rgba(168, 85, 247, 0.07);
+        }
+
+        .badge-outline-cyan {
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            color: rgba(56, 189, 248, 0.9);
+            background: rgba(56, 189, 248, 0.07);
+        }
+
+        .badge-outline-white {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.45);
+            background: transparent;
+        }
+
+        .right {
+            width: 320px;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 1.5s 0.3s ease both;
+        }
+
+        /* Morph shape SVG glow ring */
+        .glow-ring {
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(120, 40, 255, 0.18) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .shape-label {
+            position: absolute;
+            bottom: 48px;
+            right: 30px;
+            font-family: 'Space Mono', monospace;
+            font-size: 8px;
+            letter-spacing: 0.3em;
+            color: rgba(168, 85, 247, 0.5);
+            text-transform: uppercase;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        /* Divider */
+        .divider {
+            position: absolute;
+            left: 50%;
+            top: 15%;
+            width: 1px;
+            height: 70%;
+            background: linear-gradient(to bottom, transparent, rgba(120, 40, 255, 0.4), transparent);
+            z-index: 3;
+        }
+
+        /* Corner decorations */
+        .corner {
+            position: absolute;
+            z-index: 4;
+            width: 20px;
+            height: 20px;
+        }
+
+        .corner-tl {
+            top: 18px;
+            left: 18px;
+            border-top: 1px solid rgba(168, 85, 247, 0.5);
+            border-left: 1px solid rgba(168, 85, 247, 0.5);
+        }
+
+        .corner-tr {
+            top: 18px;
+            right: 18px;
+            border-top: 1px solid rgba(168, 85, 247, 0.5);
+            border-right: 1px solid rgba(168, 85, 247, 0.5);
+        }
+
+        .corner-bl {
+            bottom: 18px;
+            left: 18px;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.5);
+            border-left: 1px solid rgba(168, 85, 247, 0.5);
+        }
+
+        .corner-br {
+            bottom: 18px;
+            right: 18px;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.5);
+            border-right: 1px solid rgba(168, 85, 247, 0.5);
+        }
+
+        /* Bottom bar */
+        .bottom-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #7c3aed, #38bdf8, #7c3aed, transparent);
+            z-index: 5;
+            animation: slide 4s linear infinite;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes shimmer {
+            from {
+                background-position: 0% center;
+            }
+
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.08);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slide {
+            from {
+                background-position: -200% center;
+            }
+
+            to {
+                background-position: 200% center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="c"></canvas>
+    <div class="overlay"></div>
+    <div class="scanlines"></div>
+
+    <!-- Corner decorations -->
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+    <div class="bottom-bar"></div>
+
+    <div class="content">
+        <div class="left">
+            <div class="eyebrow">// Real-time AI Particle Engine</div>
+            <div class="title-line1">ADAPTIVE</div>
+            <div class="title-line2">MORPHIC</div>
+            <div class="tagline">
+                Webcam · Hand Gestures · WebGL · GLSL Shaders<br />
+                Three.js · MediaPipe · ~60 FPS
+            </div>
+            <div class="badges">
+                <span class="badge badge-outline">Three.js</span>
+                <span class="badge badge-outline-cyan">MediaPipe</span>
+                <span class="badge badge-outline">GLSL</span>
+                <span class="badge badge-outline-white">MIT</span>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="right">
+            <div class="glow-ring"></div>
+            <canvas id="heart" width="240" height="240" style="position:relative;z-index:2;"></canvas>
+            <div class="shape-label">◆ morphing · active</div>
+        </div>
+    </div>
+
+    <script>
+        /* ── Background star field ── */
+        const canvas = document.getElementById('c');
+        canvas.width = 1280;
+        canvas.height = 400;
+        const ctx = canvas.getContext('2d');
+
+        const stars = Array.from({ length: 320 }, () => ({
+            x: Math.random() * 1280,
+            y: Math.random() * 400,
+            r: Math.random() * 1.2,
+            o: Math.random() * 0.6 + 0.1,
+            s: Math.random() * 0.5 + 0.2
+        }));
+
+        /* ── Heart particle morph ── */
+        const hc = document.getElementById('heart');
+        const hx = hc.getContext('2d');
+        const N = 800;
+        let t = 0;
+
+        // Shape generators
+        function heartPos(i, total) {
+            const a = (i / total) * Math.PI * 2;
+            const x = 16 * Math.pow(Math.sin(a), 3);
+            const y = -(13 * Math.cos(a) - 5 * Math.cos(2 * a) - 2 * Math.cos(3 * a) - Math.cos(4 * a));
+            return { x: x * 7 + 120, y: y * 7 + 130 };
+        }
+
+        function galaxyPos(i, total) {
+            const a = (i / total) * Math.PI * 8;
+            const r = (i / total) * 90 + 10;
+            return {
+                x: r * Math.cos(a) + 120 + Math.random() * 8 - 4,
+                y: r * Math.sin(a) + 120 + Math.random() * 8 - 4
+            };
+        }
+
+        function dnaPos(i, total) {
+            const progress = i / total;
+            const y = progress * 220 + 10;
+            const strand = i % 2 === 0 ? 1 : -1;
+            const x = strand * 50 * Math.sin(progress * Math.PI * 4) + 120;
+            return { x, y };
+        }
+
+        function ringPos(i, total) {
+            const a = (i / total) * Math.PI * 2;
+            const r = 70 + (i % 3) * 18;
+            return {
+                x: r * Math.cos(a) + 120,
+                y: r * Math.sin(a) * 0.35 + 120
+            };
+        }
+
+        const shapes = [heartPos, galaxyPos, dnaPos, ringPos];
+        let shapeIdx = 0;
+        let nextIdx = 1;
+        let morphT = 0;
+
+        const particles = Array.from({ length: N }, (_, i) => {
+            const p = heartPos(i, N);
+            return { x: p.x, y: p.y, tx: p.x, ty: p.y, sx: p.x, sy: p.y };
+        });
+
+        function lerp(a, b, t) { return a + (b - a) * t; }
+        function easeInOut(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+
+        let lastShape = 0;
+
+        function drawStars() {
+            ctx.clearRect(0, 0, 1280, 400);
+            ctx.fillStyle = '#000007';
+            ctx.fillRect(0, 0, 1280, 400);
+            stars.forEach(s => {
+                s.o += Math.sin(Date.now() * 0.001 * s.s) * 0.005;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(180,200,255,${Math.max(0.05, s.o)})`;
+                ctx.fill();
+            });
+            // Nebula wisps
+            const g1 = ctx.createRadialGradient(900, 200, 20, 900, 200, 220);
+            g1.addColorStop(0, 'rgba(100,30,200,0.07)');
+            g1.addColorStop(1, 'transparent');
+            ctx.fillStyle = g1;
+            ctx.fillRect(0, 0, 1280, 400);
+
+            const g2 = ctx.createRadialGradient(200, 180, 10, 200, 180, 160);
+            g2.addColorStop(0, 'rgba(20,100,220,0.06)');
+            g2.addColorStop(1, 'transparent');
+            ctx.fillStyle = g2;
+            ctx.fillRect(0, 0, 1280, 400);
+        }
+
+        function drawParticles() {
+            hx.clearRect(0, 0, 240, 240);
+            const now = Date.now();
+
+            // Morph cycle every 2.5s
+            if (now - lastShape > 2500) {
+                lastShape = now;
+                shapeIdx = nextIdx;
+                nextIdx = (nextIdx + 1) % shapes.length;
+                morphT = 0;
+                particles.forEach((p, i) => {
+                    p.sx = p.x;
+                    p.sy = p.y;
+                    const tp = shapes[nextIdx](i, N);
+                    p.tx = tp.x;
+                    p.ty = tp.y;
+                });
+            }
+
+            morphT = Math.min(1, morphT + 0.012);
+            const et = easeInOut(morphT);
+
+            particles.forEach((p, i) => {
+                p.x = lerp(p.sx, p.tx, et);
+                p.y = lerp(p.sy, p.ty, et);
+
+                const progress = i / N;
+                const hue = 260 + progress * 80;
+                const brightness = 0.4 + 0.6 * (1 - Math.abs(et - 0.5) * 2);
+                const size = 0.8 + Math.sin(now * 0.002 + i * 0.1) * 0.4;
+
+                hx.beginPath();
+                hx.arc(p.x, p.y, size, 0, Math.PI * 2);
+                hx.fillStyle = `hsla(${hue}, 90%, 70%, ${brightness})`;
+                hx.fill();
+            });
+
+            // Glow core
+            const gx = hx.createRadialGradient(120, 120, 0, 120, 120, 80);
+            gx.addColorStop(0, 'rgba(160,80,255,0.06)');
+            gx.addColorStop(1, 'transparent');
+            hx.fillStyle = gx;
+            hx.fillRect(0, 0, 240, 240);
+        }
+
+        // Init targets
+        particles.forEach((p, i) => {
+            const tp = shapes[nextIdx](i, N);
+            p.tx = tp.x;
+            p.ty = tp.y;
+        });
+
+        function loop() {
+            drawStars();
+            drawParticles();
+            requestAnimationFrame(loop);
+        }
+        loop();
+    </script>
+</body>
+
+</html>
