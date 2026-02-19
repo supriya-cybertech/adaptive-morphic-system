@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="public/banner.png" alt="Adaptive Morphic System Banner" width="100%" />
+<img src="C:\Users\iamsu\OneDrive\Pictures\Screenshots\Screenshot 2026-02-19 020242.png" alt="Adaptive Morphic System Banner" width="100%" />
 
 <h1>🌌 Adaptive Morphic System</h1>
 
@@ -89,37 +89,58 @@ Adaptive Morphic System (AMS) bridges AI perception and real-time graphics by tu
 
 ## Architecture
 
-```
-┌───────────────────────┐
-│      Webcam Input     │
-└────────────┬──────────┘
-             │
-             ▼
-┌───────────────────────┐
-│  MediaPipe Hands AI   │
-│  (Gesture Detection)  │
-└────────────┬──────────┘
-             │  Landmark Data
-             ▼
-┌───────────────────────┐
-│  Gesture Interpreter  │
-│  (State Mapping)      │
-└────────────┬──────────┘
-             │  Morph State
-             ▼
-┌───────────────────────┐
-│  Particle Morph Engine│
-│  (GLSL + Three.js)    │
-└────────────┬──────────┘
-             │
-             ▼
-┌───────────────────────┐
-│  WebGL Renderer +     │
-│  Post-Processing      │
-└────────────┬──────────┘
-             │
-             ▼
-        Immersive Canvas
+```mermaid
+
+flowchart TD
+    %% =========================
+    %% SPACE THEME ARCHITECTURE
+    %% =========================
+
+    %% Input Layer
+    subgraph L1["🌍 Input Layer"]
+        A[📷 Webcam Input]
+    end
+
+    %% AI Processing Layer
+    subgraph L2["🧠 AI Vision Core"]
+        B[🤖 MediaPipe Hands AI\nGesture Detection]
+        C[🛰️ Gesture Interpreter\nState Mapping Engine]
+    end
+
+    %% Simulation Layer
+    subgraph L3["🌌 Particle Simulation Core"]
+        D[✨ Particle Morph Engine\nGLSL Shaders + Three.js]
+    end
+
+    %% Rendering Layer
+    subgraph L4["🚀 Rendering & Output"]
+        E[🌠 WebGL Renderer\nPost-Processing Pipeline]
+        F[🪐 Immersive 3D Canvas]
+    end
+
+    %% Flow Connections
+    A -->|Raw Video Stream| B
+    B -->|Hand Landmark Data| C
+    C -->|Mapped Morph State| D
+    D -->|GPU Buffers + Shaders| E
+    E -->|Final Frame| F
+
+    %% =========================
+    %% STYLING (SPACE THEME)
+    %% =========================
+
+    style L1 fill:#0b1d3a,stroke:#4fc3f7,stroke-width:2px,color:#ffffff
+    style L2 fill:#111827,stroke:#8b5cf6,stroke-width:2px,color:#ffffff
+    style L3 fill:#1e1b4b,stroke:#ec4899,stroke-width:2px,color:#ffffff
+    style L4 fill:#0f172a,stroke:#22d3ee,stroke-width:2px,color:#ffffff
+
+    style A fill:#0ea5e9,color:#ffffff
+    style B fill:#6366f1,color:#ffffff
+    style C fill:#8b5cf6,color:#ffffff
+    style D fill:#ec4899,color:#ffffff
+    style E fill:#06b6d4,color:#ffffff
+    style F fill:#14b8a6,color:#ffffff
+
 ```
 
 **System Workflow:**
