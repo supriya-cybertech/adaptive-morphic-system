@@ -58,7 +58,7 @@
 Adaptive Morphic System (AMS) bridges AI perception and real-time graphics by turning your hand gestures into a live visual language. Using MediaPipe's hand landmark detection and Three.js-powered WebGL rendering, AMS translates physical gestures into cinematic 3D particle transitions — heart shapes, galaxies, DNA helices, and more — all at ~60 FPS.
 
 <div align="center">
-  <img src="public/screenshots/morphs-overview.png" alt="Morph shapes overview: Heart, Saturn Ring, Galaxy Spiral, DNA Helix, Sphere" width="80%" />
+  <img src="public/Screenshot 2026-02-19 235712.png" alt="Morph shapes overview: Heart, Saturn Ring, Galaxy Spiral, DNA Helix, Sphere" width="80%" />
   <br />
   <sub>Five distinct morph targets: Heart · Saturn Ring · Galaxy Spiral · DNA Helix · Sphere Collapse</sub>
 </div>
