@@ -158,7 +158,7 @@ flowchart TD
 ## Gesture Controls
 
 <div align="center">
-  <img src="public/screenshots/gesture-guide.png" alt="Gesture control guide showing hand positions for each morph shape" width="75%" />
+  <img src="public/Hand gesture reference-guide.png" alt="Gesture control guide showing hand positions for each morph shape" width="75%" />
   <br />
   <sub>Hand gesture reference guide</sub>
 </div>
