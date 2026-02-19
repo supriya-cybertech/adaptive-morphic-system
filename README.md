@@ -225,7 +225,7 @@ adaptive-morphic-system/
 ## Control Panel
 
 <div align="center">
-  <img src="public/screenshots/control-panel.png" alt="Glassmorphism control panel UI" width="60%" />
+  <img src="public/Screenshot 2026-02-19 015906.png" alt="Glassmorphism control panel UI" width="60%" />
   <br />
   <sub>Real-time control panel with glassmorphism styling</sub>
 </div>
