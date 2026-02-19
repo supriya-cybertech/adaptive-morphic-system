@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="C:\Users\iamsu\OneDrive\Pictures\Screenshots\Screenshot 2026-02-19 020242.png" alt="Adaptive Morphic System Banner" width="100%" />
+<img src="public/Screenshot 2026-02-19 020242.png" alt="Adaptive Morphic System Banner" width="100%" />
 
 <h1>🌌 Adaptive Morphic System</h1>
 
